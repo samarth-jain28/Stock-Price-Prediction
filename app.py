@@ -66,29 +66,29 @@ x_train, y_train = np.array(x_train), np.array(y_train)
 
 # LSTM Model
 # ML Model
-'''
-model = Sequential()
-model.add(LSTM(units=50, activation='relu', return_sequences=True, input_shape=(x_train.shape[1], 1)))
-model.add(Dropout(0.2))
+# '''
+# model = Sequential()
+# model.add(LSTM(units=50, activation='relu', return_sequences=True, input_shape=(x_train.shape[1], 1)))
+# model.add(Dropout(0.2))
 
-model.add(LSTM(units=60, activation='relu', return_sequences=True))
-model.add(Dropout(0.3))
+# model.add(LSTM(units=60, activation='relu', return_sequences=True))
+# model.add(Dropout(0.3))
 
-model.add(LSTM(units=80, activation='relu', return_sequences=True))
-model.add(Dropout(0.4))
+# model.add(LSTM(units=80, activation='relu', return_sequences=True))
+# model.add(Dropout(0.4))
 
-model.add(LSTM(units=120, activation='relu'))
-model.add(Dropout(0.5))
+# model.add(LSTM(units=120, activation='relu'))
+# model.add(Dropout(0.5))
 
-model.add(Dense(units=1))
+# model.add(Dense(units=1))
 
-print(model.summary())
+# print(model.summary())
 
-print(x_train.shape, y_train.shape)
+# print(x_train.shape, y_train.shape)
 
-model.compile(optimizer='adam', loss='mean_squared_error')
-model.fit(x_train, y_train, epochs=50)
-'''
+# model.compile(optimizer='adam', loss='mean_squared_error')
+# model.fit(x_train, y_train, epochs=50)
+# '''
 # model.save('keras_model.keras')
 
 
@@ -127,7 +127,7 @@ plt.legend()
 st.pyplot(fig2)
 
 # Predict for next n days
-days = int(st.text_input('For how many days you want to predict'))
+days = int(st.text_input('For how many days you want to predict', 30))
 n = days
 p_100_days = test_data_n.tail(100)
 print(p_100_days.shape)
@@ -143,7 +143,7 @@ for i in range(100, 100 + n):
     i_data = np.append(i_data, a)
     final_predicted.append(a)
 
-i_data = i_data.reshape(130, 1)
+i_data = i_data.reshape(100+n, 1)
 i_data = scaler.inverse_transform(i_data)
 
 
