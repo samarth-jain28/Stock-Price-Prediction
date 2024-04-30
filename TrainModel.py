@@ -23,11 +23,11 @@ scaler = MinMaxScaler(feature_range=(0, 1))
 
 train_data = scaler.fit_transform(np.array(train_data_n).reshape(-1, 1))
 test_data = scaler.fit_transform(np.array(train_data_n).reshape(-1, 1))
-
+time_step = cred.time_step
 x_train = []
 y_train = []
-for i in range(100, train_data.shape[0]):
-    x_train.append(train_data[i - 100:i])
+for i in range(time_step, train_data.shape[0]):
+    x_train.append(train_data[i - time_step:i])
     y_train.append(train_data[i, 0])
 x_train, y_train = np.array(x_train), np.array(y_train)
 
@@ -53,6 +53,6 @@ print(model.summary())
 print(x_train.shape, y_train.shape)
 
 model.compile(optimizer='adam', loss='mean_squared_error')
-model.fit(x_train, y_train, epochs=50)
+model.fit(x_train, y_train, epochs=100)
 
 model.save('keras_model.keras')

@@ -57,10 +57,12 @@ scaler = MinMaxScaler(feature_range=(0, 1))
 train_data = scaler.fit_transform(np.array(train_data_n).reshape(-1, 1))
 test_data = scaler.fit_transform(np.array(train_data_n).reshape(-1, 1))
 
+time_step = cred.time_step
+
 x_train = []
 y_train = []
-for i in range(100, train_data.shape[0]):
-    x_train.append(train_data[i - 100:i])
+for i in range(time_step, train_data.shape[0]):
+    x_train.append(train_data[i - time_step:i])
     y_train.append(train_data[i, 0])
 x_train, y_train = np.array(x_train), np.array(y_train)
 
@@ -96,7 +98,7 @@ x_train, y_train = np.array(x_train), np.array(y_train)
 model = load_model('keras_model.keras')
 
 # Testing part
-past_100_days = train_data_n.tail(100)
+past_100_days = train_data_n.tail(time_step)
 
 final_df = pd.concat([past_100_days, test_data_n], ignore_index=True)
 print(past_100_days, final_df)
@@ -106,8 +108,8 @@ print(input_data.shape)
 
 x_test = []
 y_test = []
-for i in range(100, input_data.shape[0]):
-    x_test.append(input_data[i - 100:i])
+for i in range(time_step, input_data.shape[0]):
+    x_test.append(input_data[i - time_step:i])
     y_test.append(input_data[i, 0])
 x_test, y_test = np.array(x_test), np.array(y_test)
 print(x_test.shape, y_test.shape)
@@ -129,26 +131,26 @@ st.pyplot(fig2)
 # Predict for next n days
 days = int(st.text_input('For how many days you want to predict', 30))
 n = days
-p_100_days = test_data_n.tail(100)
+p_100_days = test_data_n.tail(time_step)
 print(p_100_days.shape)
 i_data = scaler.fit_transform(p_100_days)
 print(type(i_data))
-i_data = i_data.reshape(1, 100, 1)
+i_data = i_data.reshape(1, time_step, 1)
 print(i_data.shape)
 
 final_predicted = []
-for i in range(100, 100 + n):
+for i in range(time_step, time_step + n):
     i_data = i_data.reshape(1, i, 1)
-    a = model.predict(i_data[100 - i:])
+    a = model.predict(i_data[time_step - i:])
     i_data = np.append(i_data, a)
     final_predicted.append(a)
 
-i_data = i_data.reshape(100+n, 1)
+i_data = i_data.reshape(time_step+n, 1)
 i_data = scaler.inverse_transform(i_data)
 
 
 # Plotting next n days prediction
-st.subheader('Next {} days prediction after 100 in Time axis'.format(n))
+st.subheader('Next {} days prediction after {} in Time axis'.format(n, time_step))
 fig3 = plt.figure(figsize=(12, 6))
 plt.plot(i_data)
 plt.xlabel("Time")
