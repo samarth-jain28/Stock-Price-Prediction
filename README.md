@@ -1,6 +1,4 @@
-Sure! Here's a template for the README.md file for your GitHub repository:
 
----
 
 # Stock Price Prediction Using Stacked LSTM Deep Neural Network
 
